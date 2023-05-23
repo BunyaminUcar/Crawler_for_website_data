@@ -1,4 +1,5 @@
 import time
+from pynput import keyboard
 from selenium import webdriver
 from pynput.keyboard import Listener
 
@@ -27,7 +28,10 @@ def take_screenshot():
 
 
 def on_press(key):
-    if hasattr(key, 'char') and key.char == 'f':
+    if key == keyboard.Key.esc:
+        # Programı kapatma
+        return False
+    elif hasattr(key, 'char') and key.char == 'f':
         take_screenshot()
 
 
