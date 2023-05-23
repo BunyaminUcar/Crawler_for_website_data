@@ -30,6 +30,7 @@ def take_screenshot():
 def on_press(key):
     if key == keyboard.Key.esc:
         # Programı kapatma
+        driver.quit()
         return False
     elif hasattr(key, 'char') and key.char == 'f':
         take_screenshot()
