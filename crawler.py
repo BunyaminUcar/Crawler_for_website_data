@@ -4,91 +4,53 @@ from selenium.webdriver.chrome.options import Options
 # Chrome WebDriver'ı başlatma
 chrome_options = Options()
 chrome_options.add_argument("--headless")  # Arka planda çalıştırmak için
-driver = webdriver.Chrome("C:\chromewebdriver\chromedriver.exe", service_log_path="NUL")
+driver = webdriver.Chrome(
+    "C:\chromewebdriver\chromedriver.exe", service_log_path="NUL")
 driver.maximize_window()
 # E-ticaret sitelerinin URL'lerini içeren bir liste oluşturma
 etiket_siteleri = [
-    "https://www.amazon.com",
-    "https://www.ebay.com",
-    "https://www.alibaba.com",
-    "https://www.walmart.com",
-    "https://www.etsy.com",
-    "https://www.target.com",
-    "https://www.bestbuy.com",
-    "https://www.flipkart.com",
-    "https://www.rakuten.com",
-    "https://www.asos.com",
-    "https://www.zalando.com",
-    "https://www.macys.com",
-    "https://www.newegg.com",
-    "https://www.overstock.com",
-    "https://www.aliexpress.com",
-    "https://www.costco.com",
-    "https://www.homedepot.com",
-    "https://www.kohls.com",
-    "https://www.jcpenney.com",
-    "https://www.nordstrom.com",
-    "https://www.sears.com",
-    "https://www.wayfair.com",
-    "https://www.ikea.com",
-    "https://www.bedbathandbeyond.com",
-    "https://www.urbanoutfitters.com",
-    "https://www.hm.com",
-    "https://www.footlocker.com",
-    "https://www.sephora.com",
-    "https://www.nike.com",
-    "https://www.adidas.com",
-    "https://www.uniqlo.com",
-    "https://www.gap.com",
-    "https://www.oldnavy.com",
-    "https://www.bananarepublic.com",
-    "https://www.bathandbodyworks.com",
-    "https://www.cvs.com",
-    "https://www.walgreens.com",
-    "https://www.ulta.com",
-    "https://www.officedepot.com",
-    "https://www.staples.com",
-    "https://www.gamestop.com",
-    "https://store.playstation.com",
-    "https://www.microsoft.com/en-us/store/b/xbox",
-    "https://store.steampowered.com",
-    "https://www.gog.com",
-    "https://www.greenmangaming.com",
-    "https://www.cdkeys.com",
-    "https://www.fanatical.com",
+
+
+
+    "https://www.boyner.com.tr",
+
+
+    "https://www.gordion.com",
+    "https://www.trendyol.com.tr",
+    "https://www.sanalmarket.com.tr",
+    "https://www.carrefoursa.com",
+    "https://www.penti.com",
+    "https://www.gratis.com.tr",
+    "https://www.koton.com.tr",
+    "https://www.defacto.com.tr",
+    "https://www.herry.com.tr",
+    "https://www.yvesrocher.com.tr",
+    "https://www.rossmann.com.tr",
+    "https://www.mediamarkt.com.tr",
+    "https://www.tekzen.com.tr",
+    "https://www.decathlon.com.tr",
+    "https://www.morhipo.com.tr",
+    "https://www.lcwaikiki.com.tr",
+    "https://www.mavi.com",
+    "https://www.koctas.com.tr",
+    "https://www.defacto.com",
+    "https://www.boyner.com.tr",
+    "https://www.yemeksepeti.com.tr",
+    "https://www.sahibinden.com",
+    "https://www.arcelik.com.tr",
+    "https://www.istikbal.com.tr"
 ]
 
 
-# Ziyaret edilen linkleri tutmak için bir küme
-ziyaret_edilen_linkler = set()
-
-
-def alt_linkleri_dolaş(url):
-    driver.get(url)
-
-    # Ekran görüntüsü al
-    driver.save_screenshot("screenshot.png")  # İstediğiniz yerde screenshot'ı kaydedin
-
-    # Diğer sayfalara geçiş ve ekran görüntüsü alma
-    links = driver.find_elements_by_tag_name("a")  # Tüm <a> etiketlerini bulma
-    for link in links:
-        alt_url = link.get_attribute("href")  # Linkin URL'sini al
-        if alt_url and alt_url.startswith("http"):  # Geçerli bir URL ise
-            if alt_url not in ziyaret_edilen_linkler:  # Daha önce ziyaret edilmemişse
-                ziyaret_edilen_linkler.add(alt_url)  # Ziyaret edilen linklere ekle
-                alt_linkleri_dolaş(alt_url)  # Alt linkleri dolaş
-
-
-# Her bir e-ticaret sitesi için döngü
+# Her bir e-ticaret sitesini ziyaret ederek screenshot alın
 for site_url in etiket_siteleri:
-    # Başlangıç linkini ekle
-    ziyaret_edilen_linkler.add(site_url)
+    driver.get(site_url)  # E-ticaret sitesini açma
 
-    # Alt linkleri dolaşma
-    alt_linkleri_dolaş(site_url)
-
-# Alt linkleri dolaşma işlevi
-
+    # Sayfanın tam ekran görüntüsünü alın
+    screenshot_adı = site_url.replace(
+        "https://", "").replace(".", "_") + ".png"
+    driver.save_screenshot(screenshot_adı)
+    print(f"{site_url} için screenshot alındı: {screenshot_adı}")
 
 # WebDriver'ı kapatma
 driver.quit()
