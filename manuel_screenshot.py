@@ -21,19 +21,30 @@ def take_screenshot():
     timestamp = time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime())
     # Ekran görüntüsü dosyasının adı ve formatı
     screenshot_file = f"screenshot_{timestamp}.png"
+
+    # Yan sekmedeki sayfaya geçmek için
+    default_handle = driver.current_window_handle
+    handles = driver.window_handles
+    for handle in handles:
+        if handle != default_handle:
+            driver.switch_to.window(handle)
+            break
+
+    # Yan sekmeden ekran görüntüsü almak için geçerli sekmeye odaklanın
+    driver.switch_to.window(driver.current_window_handle)
     driver.save_screenshot(screenshot_file)
+
     print(f"Ekran görüntüsü kaydedildi: {screenshot_file}")
 
 # Klavye tuşu dinleyicisi
 
 
 def on_press(key):
-    if key == keyboard.Key.esc:
-        # Programı kapatma
-        driver.quit()
-        return False
-    elif hasattr(key, 'char') and key.char == 'f':
+    if hasattr(key, 'char') and key.char == 'f':
         take_screenshot()
+    elif key == keyboard.Key.esc:
+        # Listener'ı durdur
+        return False
 
 
 # Klavye tuşlarını dinleme
